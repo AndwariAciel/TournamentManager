@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+	prefWidth="1280.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="de.andwari.tournamentfx.ranking.RankingPageController">
+	<center>
+		<TableView fx:id="tvListOfRankings"
+			BorderPane.alignment="CENTER">
+			<columns>
+				<TableColumn fx:id="tcRank" prefWidth="75.0" text="Rank" />
+				<TableColumn fx:id="tcPlayer" prefWidth="500.0"
+					text="Player" />
+				<TableColumn fx:id="tcPoints" prefWidth="75.0"
+					text="Points" />
+			</columns>
+		</TableView>
+	</center>
+	<right>
+		<FlowPane prefHeight="200.0" prefWidth="300.0"
+			BorderPane.alignment="TOP_LEFT">
+			<children>
+				<Label alignment="CENTER" prefWidth="280.0" text="Rankings"
+					textAlignment="CENTER">
+					<font>
+						<Font name="System Bold" size="14.0" />
+					</font>
+				</Label>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Button fx:id="btYear" disable="true"
+							mnemonicParsing="false" onAction="#switchMode" text="Year">
+							<HBox.margin>
+								<Insets right="30.0" />
+							</HBox.margin>
+						</Button>
+						<Button fx:id="btMonth" mnemonicParsing="false"
+							onAction="#switchMode" text="Month" />
+					</children>
+				</HBox>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Label prefWidth="80.0" text="Year" />
+						<ChoiceBox fx:id="cbYear" prefWidth="150.0" />
+					</children>
+				</HBox>
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+					<children>
+						<Label prefWidth="80.0" text="Month" />
+						<ChoiceBox fx:id="cbMonth" disable="true"
+							prefWidth="150.0" />
+					</children>
+				</HBox>
+				<Separator prefWidth="260.0">
+					<FlowPane.margin>
+						<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+					</FlowPane.margin>
+				</Separator>
+				<Button mnemonicParsing="false" onAction="#givePoints"
+					text="Give points manually">
+					<FlowPane.margin>
+						<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+					</FlowPane.margin>
+				</Button>
+			</children>
+		</FlowPane>
+	</right>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+	<top>
+		<FlowPane alignment="CENTER" columnHalignment="CENTER"
+			BorderPane.alignment="CENTER">
+			<children>
+				<Label fx:id="lbHeading" alignment="CENTER"
+					text="Rankings - Year">
+					<font>
+						<Font size="24.0" />
+					</font>
+				</Label>
+			</children>
+			<BorderPane.margin>
+				<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+			</BorderPane.margin>
+		</FlowPane>
+	</top>
+</BorderPane>
