@@ -35,7 +35,7 @@
 					text="Score" />
 				<TableColumn fx:id="colOpscore" prefWidth="90.0"
 					text="OpScore" />
-				<TableColumn fx:id="colGamescroe" prefWidth="90.0"
+				<TableColumn fx:id="colGamescore" prefWidth="90.0"
 					text="GameScore" />
 				<TableColumn fx:id="colOpGamescore" prefWidth="90.0"
 					text="OpGameScore" />

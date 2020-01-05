@@ -2,6 +2,7 @@
 .classpath
 .project
 
+log.log
 target/
 shade/
 pom.xml.tag

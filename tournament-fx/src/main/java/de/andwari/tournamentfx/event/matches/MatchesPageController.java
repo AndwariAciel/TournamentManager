@@ -18,6 +18,7 @@ import de.andwari.tournamentfx.event.matches.dvos.MatchListDvo;
 import de.andwari.tournamentfx.event.rankings.dvos.RankingsDvo;
 import de.andwari.tournamentfx.event.standingoverview.StandingFinalOverviewController;
 import de.andwari.tournamentfx.event.standingoverview.StandingOverviewController;
+import de.andwari.tournamentfx.event.standingoverview.control.RankingsCell;
 import de.andwari.tournamentfx.password.PasswordHandler;
 import de.andwari.tournamentfx.util.FxmlResource;
 import javafx.collections.FXCollections;
@@ -168,9 +169,13 @@ public class MatchesPageController implements Serializable {
 		listViewOfRankings.setItems(listOfRankings);
 
 		tcStandingRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
+		tcStandingRank.setCellFactory(cb -> new RankingsCell());
 		tcStandingPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
+		tcStandingPlayer.setCellFactory(cb -> new RankingsCell());;
 		tcStandingScore.setCellValueFactory(cellData -> cellData.getValue().getScoreStringProperty());
+		tcStandingScore.setCellFactory(cb -> new RankingsCell());
 		tcStandingPoints.setCellValueFactory(cellData -> cellData.getValue().getScoreProperty());
+		tcStandingPoints.setCellFactory(cb -> new RankingsCell());
 
 		tcStandingRank.setSortable(false);
 		tcStandingPlayer.setSortable(false);
@@ -180,7 +185,7 @@ public class MatchesPageController implements Serializable {
 		updateRankingList();
 	}
 
-	private void updateRankingList() {
+	public void updateRankingList() {
 		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());
 		listOfRankings.clear();
 		listOfRankings.addAll(rankings);
@@ -245,8 +250,8 @@ public class MatchesPageController implements Serializable {
 			Stage newWindow = new Stage();
 			newWindow.setScene(scene);
 			StandingOverviewController controller = loader.getController();
+			controller.initialize(round, this);
 			newWindow.show();
-			controller.initialize(round);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -261,7 +266,7 @@ public class MatchesPageController implements Serializable {
 			Stage newWindow = new Stage();
 			newWindow.setScene(scene);
 			StandingOverviewController controller = loader.getController();
-			controller.initialize(round);
+			controller.initialize(round, this);
 			newWindow.showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();

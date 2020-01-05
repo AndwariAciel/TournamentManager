@@ -12,7 +12,6 @@ import de.andwari.tournamentcore.ranking.entity.Rank;
 import de.andwari.tournamentcore.utils.BoosterDistributor;
 import de.andwari.tournamentfx.event.matches.control.MatchesPageService;
 import de.andwari.tournamentfx.event.rankings.dvos.RankingsDvo;
-import de.andwari.tournamentfx.event.standingoverview.control.StandingListCellCallback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -34,9 +33,6 @@ public class StandingFinalOverviewController {
 	private Button btnOk;
 
 	@Inject
-	private StandingListCellCallback callback;
-
-	@Inject
 	private MatchesPageService pageService;
 
 	@Inject
@@ -51,7 +47,6 @@ public class StandingFinalOverviewController {
 	public void initialize(Round round) {
 		this.round = round;
 		listOfStandings = FXCollections.observableArrayList();
-		tableStandings.setRowFactory(callback);
 		tableStandings.setItems(listOfStandings);
 		initColumns();
 		initList();
