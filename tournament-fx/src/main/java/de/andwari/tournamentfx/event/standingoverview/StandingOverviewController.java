@@ -6,10 +6,11 @@ import javax.inject.Inject;
 
 import de.andwari.tournamentcore.event.entity.Round;
 import de.andwari.tournamentcore.exception.HasOngoingMatchException;
+import de.andwari.tournamentfx.event.matches.MatchesPageController;
 import de.andwari.tournamentfx.event.matches.control.MatchesPageService;
 import de.andwari.tournamentfx.event.rankings.converter.RankingsDvoConverter;
 import de.andwari.tournamentfx.event.rankings.dvos.RankingsDvo;
-import de.andwari.tournamentfx.event.standingoverview.control.StandingListCellCallback;
+import de.andwari.tournamentfx.event.standingoverview.control.RankingsCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,33 +22,32 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 public class StandingOverviewController {
-	
+
 	@FXML
-	private TableColumn<RankingsDvo, String> colRank, colPlayer, colScore, colOpscore, colGamescroe, colOpGamescore;
-	
+	private TableColumn<RankingsDvo, String> colRank, colPlayer, colScore, colOpscore, colGamescore, colOpGamescore;
+
 	@FXML
 	private TableView<RankingsDvo> tableStandings;
-	
+
 	@FXML
 	private Button btnOk, btnDrop;
-	
+
 	private ObservableList<RankingsDvo> listOfStandings;
-	
+
 	private Round round;
-	
-	@Inject
-	private StandingListCellCallback callback;
-	
+
 	@Inject
 	private MatchesPageService pageService;
-	
-	@Inject 
+
+	@Inject
 	private RankingsDvoConverter converter;
 	
-	public void initialize(Round round) {
+	private MatchesPageController matchesPageController;
+
+	public void initialize(Round round, MatchesPageController matchesPageController) {
+		this.matchesPageController = matchesPageController;
 		this.round = round;
 		listOfStandings = FXCollections.observableArrayList();
-		tableStandings.setRowFactory(callback);
 		tableStandings.setItems(listOfStandings);
 		initColumns();
 		initList();
@@ -55,37 +55,44 @@ public class StandingOverviewController {
 
 	private void initColumns() {
 		colRank.setCellValueFactory(cellData -> cellData.getValue().getRankProperty());
+		colRank.setCellFactory(cb -> new RankingsCell());
 		colPlayer.setCellValueFactory(cellData -> cellData.getValue().getPlayerProperty());
+		colPlayer.setCellFactory(cb -> new RankingsCell());
 		colScore.setCellValueFactory(cellData -> cellData.getValue().getScoreProperty());
+		colScore.setCellFactory(cb -> new RankingsCell());
 		colOpscore.setCellValueFactory(cellData -> cellData.getValue().getOpMatchScoreProperty());
-		colGamescroe.setCellValueFactory(cellData -> cellData.getValue().getGameScoreProperty());
+		colOpscore.setCellFactory(cb -> new RankingsCell());
+		colGamescore.setCellValueFactory(cellData -> cellData.getValue().getGameScoreProperty());
+		colGamescore.setCellFactory(cb -> new RankingsCell());
 		colOpGamescore.setCellValueFactory(cellData -> cellData.getValue().getOpGamesScoreProperty());
-		
+		colOpGamescore.setCellFactory(cb -> new RankingsCell());
+
 		colRank.setSortable(false);
 		colPlayer.setSortable(false);
 		colScore.setSortable(false);
 		colOpscore.setSortable(false);
 		colOpGamescore.setSortable(false);
-		colGamescroe.setSortable(false);
+		colGamescore.setSortable(false);
 		colOpGamescore.setSortable(false);
 	}
 
 	private void initList() {
 		listOfStandings.removeAll(listOfStandings);
-		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());	
+		ArrayList<RankingsDvo> rankings = pageService.getRankings(round.getEvent());
 		rankings.stream().forEach(dvo -> listOfStandings.add(dvo));
 	}
 
 	public void dropPlayer() {
 		int index = tableStandings.getSelectionModel().getSelectedIndex();
-		if(index < 0) 
+		if (index < 0)
 			return;
 		RankingsDvo dvo = listOfStandings.get(index);
 		try {
 			pageService.dropPlayer(converter.convertToEntity(dvo, round));
 			dvo.setDropped(true);
 			listOfStandings.set(index, dvo);
-		} catch(HasOngoingMatchException ex) {
+			matchesPageController.updateRankingList();
+		} catch (HasOngoingMatchException ex) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("unfinished Match");
 			alert.setHeaderText("Warning");
@@ -93,9 +100,9 @@ public class StandingOverviewController {
 			alert.showAndWait();
 		}
 	}
-	
+
 	public void closeWindow() {
 		Stage stage = (Stage) btnOk.getScene().getWindow();
-	    stage.close();
+		stage.close();
 	}
 }

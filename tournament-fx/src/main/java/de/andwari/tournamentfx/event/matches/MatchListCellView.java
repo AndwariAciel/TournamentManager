@@ -1,7 +1,6 @@
 package de.andwari.tournamentfx.event.matches;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javax.inject.Inject;
 
